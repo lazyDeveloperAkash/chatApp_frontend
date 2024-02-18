@@ -14,7 +14,7 @@ const Right = (props) => {
     const [user, setUser] = useState(useSelector(state => state.userReducers.user));
     const [chatUser, setChatUser] = useState(null);
     const [message, setMessage] = useState("");
-    const [camera, setCamera] = useState(false);
+    const [preMsg, setPreMsg] = useState("");
     const dispatch = useDispatch();
 
     const receaver = useSelector((state) => state.userReducers.chatUser);
@@ -63,14 +63,19 @@ const Right = (props) => {
                 chatUpload(true);
             }
             //create div
+            const profile = document.createElement('div');
+            profile.className = "w-6 h-6 rounded-full";
             const parent = document.createElement("div");
             const div = document.createElement("div");
-            parent.className = "flex w-hull items-centre p-2";
+            parent.className = "flex w-full items-centre p-2";
             parent.appendChild(div);
             div.className = "font-[1.5vmax] p-[1vmax] rounded-[1.5vmax] bg-[#5757d7]";
             div.textContent = message;
-            document.querySelector("#midArea").appendChild(parent);
-            //upload chat with fn call
+            const wrapper = document.createElement('div');
+            wrapper.className = "flex gap-2";
+            wrapper.appendChild(profile);
+            wrapper.appendChild(parent);
+            document.querySelector("#midArea").appendChild(wrapper);
             setMessage("");
         }
     }
