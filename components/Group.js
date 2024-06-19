@@ -16,7 +16,7 @@ const group = (props) => {
     const createGroup = () => {
         const groupName = window.prompt("Enter Group Name");
         const groupInfo = {
-            userArr: idArr,
+            userArr: nameArr.map(({id})=> id),
             name: groupName
         }
         dispatch(asynccreateGroup(groupInfo));

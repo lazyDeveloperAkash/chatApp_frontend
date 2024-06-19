@@ -33,12 +33,12 @@ const newChat = (props) => {
         }
     }
 
-    const chatHandler = (user) => {
-        setClickedId(user._id);
-        dispatch(asyncNewChat(user._id));
-        setFriendArr((oldFriend)=> [user, ...oldFriend]);
+    const chatHandler = (newUser) => {
+        setClickedId(newUser._id);
+        dispatch(asyncNewChat(newUser._id));
+        setFriendArr((oldFriend)=> [newUser, ...oldFriend]);
         setNewChat(false);
-        dispatch(asyncChatUser(user));
+        dispatch(asyncChatUser(newUser));
     }
 
     const inviteHandler = () => {
@@ -62,10 +62,10 @@ const newChat = (props) => {
                         </div>
 
                     ) : (
-                        contacts && contacts.map((user, idx) => (
+                        contacts && contacts.map((newUser, idx) => (
                             <div key={idx} className='border-black hover:bg-black rounded-xl flex items-center justify-between px-3 py-4'>
-                                <h1 className='ml-5 text-2xl text-white'>{user.name}</h1>
-                                <h1 className='text-[#4acd8d] cursor-pointer' onClick={()=> chatHandler(user) }>Chat</h1>
+                                <h1 className='ml-5 text-2xl text-white'>{newUser.name}</h1>
+                                <h1 className='text-[#4acd8d] cursor-pointer' onClick={()=> chatHandler(newUser) }>Chat</h1>
                             </div>
                         ))
                     )}

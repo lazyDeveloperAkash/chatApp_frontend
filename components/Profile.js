@@ -53,15 +53,17 @@ const Profile = (props) => {
 
     return (
         <div className='absolute z-10 h-[100vh] w-[100vw] flex items-center justify-center bg-[#0000007f] overflow-hidden'>
-            <div className='w-full h-full md:w-[30vmax] md:h-[72vh] rounded-2xl px-4 bg-black'>
+            <div className='w-full h-full md:w-[30vmax] md:h-[80vh] rounded-2xl px-4 bg-black'>
                 <div className='w-full flex justify-end p-4 pb-0'><div onClick={() => setProfile(false)}><IoMdClose color='white' size={25} /></div></div>
                 <h1 className='text-white mx-5 text-2xl'>Profile</h1>
                 <div className='w-full flex items-center justify-center'>
                     <form onSubmit={avatarHandler}>
-                        <div className='h-[35vmax] w-[35vmax] md:h-[12vmax] md:w-[12vmax] rounded-full bg-green-400 cursor-pointer overflow-hidden bg-cover' onClick={clickHandler}>
+                        <div onClick={clickHandler}>
+                            <div className='h-[30vmax] w-[30vmax] md:h-[12vmax] md:w-[12vmax] rounded-full bg-green-400 cursor-pointer overflow-hidden bg-cover'>
+                                <img className='h-full' src={user && user.avatar.url} />
+                            </div>
                             <input ref={inputRef} className='w-0 h-0' type="file" onChange={() => buttonRef.current.click()} />
                             <button ref={buttonRef} className='h-0 w-0' type='submit'></button>
-                            <img src={user && user.avatar.url} alt="" />
                         </div>
                     </form>
                 </div>

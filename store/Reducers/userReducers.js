@@ -3,7 +3,6 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
     user: null,
     chatUser: null,
-    errors: [],
     isAuthenticated: false,
 }
 
@@ -25,15 +24,9 @@ export const userReducer = createSlice({
         removeChatUser: (state, action) => {
             state.chatUser = null;
         },
-        isError: (state, action) => {
-            state.errors.push(action.payload);
-        },
-        removeError: (state, action) => {
-            state.errors = [];
-        },
     },
 })
 
-export const { addUser, removeUser, chatUser, removeChatUser, isError, removeError,addAllUser } = userReducer.actions
+export const { addUser, removeUser, chatUser, removeChatUser, addAllUser } = userReducer.actions
 
 export default userReducer.reducer

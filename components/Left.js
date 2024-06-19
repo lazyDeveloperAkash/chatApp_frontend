@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { CiSearch } from "react-icons/ci";
 import { TbMessage2Plus } from "react-icons/tb";
 import Profile from './Profile';
@@ -25,6 +25,9 @@ const left = (props) => {
       dispatch(asyncGroupDetails(id));
       setClickedId(id);
   }
+
+  useEffect(() => {}, [user]);
+  
 
   return (
     <div className='h-[100vh] w-[100vw] min-w-[30vmax] md:w-[30vw] bg-[#000000d3] relative'>

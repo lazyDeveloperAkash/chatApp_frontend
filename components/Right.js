@@ -14,10 +14,10 @@ const Right = (props) => {
     const [user, setUser] = useState(useSelector(state => state.userReducers.user));
     const [chatUser, setChatUser] = useState(null);
     const [message, setMessage] = useState("");
-    const [preMsg, setPreMsg] = useState("");
     const dispatch = useDispatch();
 
     const receaver = useSelector((state) => state.userReducers.chatUser);
+    console.log(chatUser);
 
     const videoCallHandler = () => {
         setVideo(true);
@@ -59,23 +59,18 @@ const Right = (props) => {
                 chatUpload(false);
             }
             else {
-                socket.emit('group-msg', { groupId: chatUser._id, msg: message, name: user.name, id: chatUser._id });
+                socket.emit('group-msg', { groupId: chatUser._id, msg: message, name: user.name, id: user._id });
                 chatUpload(true);
             }
             //create div
-            const profile = document.createElement('div');
-            profile.className = "w-6 h-6 rounded-full";
             const parent = document.createElement("div");
             const div = document.createElement("div");
             parent.className = "flex w-full items-centre p-2";
             parent.appendChild(div);
             div.className = "font-[1.5vmax] p-[1vmax] rounded-[1.5vmax] bg-[#5757d7]";
             div.textContent = message;
-            const wrapper = document.createElement('div');
-            wrapper.className = "flex gap-2";
-            wrapper.appendChild(profile);
-            wrapper.appendChild(parent);
-            document.querySelector("#midArea").appendChild(wrapper);
+            parent.appendChild(div);
+            document.querySelector("#midArea").appendChild(parent);
             setMessage("");
         }
     }
@@ -89,6 +84,15 @@ const Right = (props) => {
         dispatch(asyncChatUpload(msg));
     }
 
+    const groupChatUpload = () => {
+        const msg = {
+            receaver: chatUser._id,
+            msg: message,
+        }
+        dispatch(asyncChatUpload(msg));
+    }
+
+
     useEffect(() => {
         socket.on('new-message', (data) => {
             const parent = document.createElement("div");
@@ -101,7 +105,7 @@ const Right = (props) => {
         })
 
         socket.on('group-message', ({ id, name, msg }) => {
-            if (id != user._id) {
+            if (id !== user._id) {
                 const parent = document.createElement("div");
                 parent.className = `flex justify-end w-full items-centre p-2`;
 
@@ -143,7 +147,7 @@ const Right = (props) => {
             <div className='w-full h-[100vh] md:w-[70vw] md:block hidden  bg-[#312f2f]'>
                 <div className='w-full h-[10%] flex justify-between items-center px-6'>
                     <div className='flex justify-between items-center gap-6'>
-                        <div className='bg-white h-14 w-14 rounded-full cursor-pointer overflow-hidden bg-cover'><img src={chatUser && chatUser.avatar.url} alt="" /></div>
+                        <div className='bg-white h-14 w-14 rounded-full cursor-pointer overflow-hidden bg-cover'><img src={chatUser && chatUser.avatar?.url} alt="" /></div>
                         <h1 className='text-xl text-white'>{chatUser && chatUser.name}</h1>
                     </div>
                     {onCall ?

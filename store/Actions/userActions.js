@@ -1,5 +1,5 @@
 import axios from "@/utils/axios";
-import { addUser, removeUser, chatUser, removeChatUser, isError, removeError, addAllUser } from "../Reducers/userReducers";
+import { addUser, removeUser, chatUser } from "../Reducers/userReducers";
 import { toast } from "react-toastify";
 import cookie from "@/utils/cookie";
 
@@ -8,9 +8,7 @@ export const asyncCurrentUser = () => async (dispatch, getState) => {
         const { data } = await axios.get("/user");
         dispatch(addUser(data));
     } catch (error) {
-        // toast.error(error.response.data.message);
-        console.log(error.responce)
-        // dispatch(isError(error.response.data.message));
+        console.log(error.responce);
     }
 }
 
@@ -19,7 +17,7 @@ export const asyncChatUser = (id) => async (dispatch, getState) => {
         const { data } = await axios.post("/chat", {id});
         dispatch(chatUser(data));
     } catch (error) {
-        console.log(error.response.data.message)
+        console.log(error.response.data.message && error.response.data.message)
     }
 }
 
@@ -29,7 +27,7 @@ export const asyncSingup = (user) => async (dispatch, getState) => {
         dispatch(asyncCurrentUser());
         toast.success("Singup Succesfull");
     } catch (error) {
-        if (error.response.data.message != "Please login to eccess the resource") toast.error(error.response.data.message);
+        if (error.response.data.message != "Please login to eccess the resource") toast.error(error.response.data.message && error.response.data.message);
         console.log(error)
     }
 }
@@ -40,8 +38,7 @@ export const asyncSinginEmail = (user) => async (dispatch, getState) => {
         dispatch(asyncCurrentUser());
         toast.success("Login Succesfull");
     } catch (error) {
-        toast.error(error.response);
-        // dispatch(isError(error.response.data.message));
+        toast.error(error.response.data.message && error.response.data.message);
     }
 }
 
@@ -52,7 +49,7 @@ export const asyncSinginNumber = (user) => async (dispatch, getState) => {
         cookie(response);
         toast.success("Login Succesfull");
     } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.response.data.message && error.response.data.message);
     }
 }
 
@@ -60,17 +57,18 @@ export const asynccreateGroup = (groupInfo) => async (dispatch, getState) => {
     try {
         const { data } = await axios.post("/createGroup", groupInfo);
         toast.success("Group Created Succesfully");
+        dispatch(asyncCurrentUser());
     } catch (error) {
-        console.log(error.response.data.message)
+        console.log(error.response?.data.message)
     }
 }
+
 export const asyncGroupDetails = (id) => async (dispatch, getState) => {
     try {
         const { data } = await axios.post('/group-info', { id });
         dispatch(chatUser(data));
-        console.log(data)
     } catch (error) {
-        console.log(error.response.data.message)
+        console.log(error.response.data.message && error.response.data.message)
     }
 }
 
@@ -78,9 +76,9 @@ export const asyncSingout = () => async (dispatch, getState) => {
     try {
         const { data } = await axios.get("/singout");
         dispatch(removeUser());
-        toast.info(data.message);
+        toast.info(data.message && data.message);
     } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.response.data.message && error.response.data.message);
     }
 }
 
@@ -88,9 +86,9 @@ export const asyncUpdateUser = (user) => async (dispatch, getState) => {
     try {
         const { data } = await axios.post("/update-profile", user);
         dispatch(asyncCurrentUser());
-        toast.success(data.message);
+        toast.success(data.message && data.message);
     } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.response.data.message && error.response.data.message);
     }
 }
 
@@ -98,9 +96,9 @@ export const asyncAvatar = (avatar) => async (dispatch, getState) => {
     try {
         const { data } = await axios.post("/upload-profile-picture", avatar);
         dispatch(asyncCurrentUser());
-        toast.success(data.message);
+        toast.success(data.message && data.message);
     } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.response.data.message && error.response.data.message);
     }
 }
 
@@ -108,23 +106,21 @@ export const asyncResetPasswordStudent = (password) => async (dispatch, getState
     try {
         const { data } = await axios.post("/update-password", password);
         dispatch(asyncCurrentUser());
-        toast.success(data.message);
+        toast.success(data.message && data.message);
     } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.response.data.message && error.response.data.message);
     }
 }
 
-// delte user
-// export const asyncDeleteStudent = () => async (dispatch, getState) => {
-//     try {
-//         const { data } = await axios.get("/student/delete");
-//         dispatch(removeStudent());
-//         toast.warning(data.message);
-//     } catch (error) {
-//         toast.error(error.response.data.message);
-//         dispatch(isError(error.response.data.message));
-//     }
-// }
+export const asyncDeleteStudent = () => async (dispatch, getState) => {
+    try {
+        const { data } = await axios.get("/delete");
+        dispatch(removeStudent());
+        toast.warning(data.message && data.message);
+    } catch (error) {
+        toast.error(error.response.data.message && error.response.data.message);
+    }
+}
 
 export const asyncSendEmail = (email) => async (dispatch, getState) => {
     try {
@@ -159,7 +155,6 @@ export const asyncForgetPassChangeStudent = (newPass) => async (dispatch, getSta
 // end of CRED operations
 
 export const asyncNewChat = (id) => async (dispatch, getState) => {
-    console.log(id)
     try {
         const { data } = await axios.post("/new-chat", {id});
         dispatch(chatUser(data));

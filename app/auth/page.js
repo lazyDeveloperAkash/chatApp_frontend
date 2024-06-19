@@ -16,12 +16,12 @@ import BlankRight from '@/components/BlankRight'
 const DynamicVideoComponent = dynamic(() => import('@/components/Video'), { ssr: false });
 
 
-
 const ENDPOINT = 'http://localhost:8080'
 const socket = socketIo(ENDPOINT, { path: '/socket', transports: ['websocket'] })
 
 
 const page = () => {
+  console.log(socket)
   const dispatch = useDispatch();
   const [user, setUser] = useState(useSelector(state => state.userReducers.user));
   const [friendArr, setFriendArr] = useState(user && user.friend);
@@ -31,7 +31,7 @@ const page = () => {
   const [newChat, setNewChat] = useState(false);
   const [clickedId, setClickedId] = useState("");
   const [isOutgoingCall, setIsOutgoingCall] = useState(false); // incoming or outgoing call to send data to video component
-  const [isGroupInfiStored, setIsGroupInfiStored] = useState(false);
+  const [isGroupInfoStored, setIsGroupInfoStored] = useState(false);
   const [remotePeerId, setRemotePeerId] = useState("");
   const [isPeerAvailable, setIsPeerAvailable] = useState(null);
   const [callerContact, setCallerContact] = useState("");
@@ -45,7 +45,7 @@ const page = () => {
     if (isAuthenticated && !user) dispatch(asyncCurrentUser());
     if (!isAuthenticated) router.push("/singup");
     if (user) socket.emit("storeClientInfo", { contact: user.contact });
-    if (!isGroupInfiStored) {
+    if (!isGroupInfoStored) {
       let idArr = [];
       user && user.groups.map((e) => {
         idArr.push(e._id);
@@ -64,7 +64,7 @@ const page = () => {
       })
     }
 
-    socket.on('room-status', ({ res }) => setIsGroupInfiStored(res));
+    socket.on('room-status', ({ res }) => setIsGroupInfoStored(res));
 
     socket.on('incoming-call', (caller) => {
       if (window.confirm(`${caller.callType} Call from ${caller.name}`)) {
