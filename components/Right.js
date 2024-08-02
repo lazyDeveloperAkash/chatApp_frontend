@@ -8,7 +8,7 @@ import { asyncChatUpload } from '@/store/Actions/userActions';
 
 const Right = (props) => {
 
-    const { setVideo, onCall, setOnCall, setAudio, socket } = props;
+    const { setVideo, onCall, setOnCall, setAudio, socket, clickedId } = props;
 
     const [callType, setCallType] = useState("")
     const [user, setUser] = useState(useSelector(state => state.userReducers.user));
@@ -17,7 +17,6 @@ const Right = (props) => {
     const dispatch = useDispatch();
 
     const receaver = useSelector((state) => state.userReducers.chatUser);
-    console.log(chatUser);
 
     const videoCallHandler = () => {
         setVideo(true);
@@ -54,7 +53,9 @@ const Right = (props) => {
             setMessage("");
             return;
         } else {
+            console.log("hello")
             if (chatUser.contact) {
+                console.log(message)
                 socket.emit('join', { user: user.contact, receaver: chatUser.contact, msg: message });
                 chatUpload(false);
             }
@@ -144,7 +145,7 @@ const Right = (props) => {
 
     return (
         <>
-            <div className='w-full h-[100vh] md:w-[70vw] md:block hidden  bg-[#312f2f]'>
+            <div className={`w-full h-[100vh] md:w-[70vw] md:block ${clickedId ? "" : "hidden"}  bg-[#312f2f]`}>
                 <div className='w-full h-[10%] flex justify-between items-center px-6'>
                     <div className='flex justify-between items-center gap-6'>
                         <div className='bg-white h-14 w-14 rounded-full cursor-pointer overflow-hidden bg-cover'><img src={chatUser && chatUser.avatar?.url} alt="" /></div>
@@ -164,7 +165,7 @@ const Right = (props) => {
                         e.sender === user._id ?
                             (<div key={idx} className='flex w-full items-centre p-2'><div className='font-[1.5vmax] p-[1vmax] rounded-[1.5vmax] bg-[#5757d7]'>{e.msg}</div></div>)
                             : (<div key={idx} className='flex w-full items-centre p-2 justify-end'><div className='font-[1.5vmax] p-[1vmax] rounded-[1.5vmax] mr-6 bg-[#99999c]'>{e.msg}</div></div>)
-                    )) : (chatUser && chatUser.chats.map((e, idx) => (
+                    )) : (chatUser && chatUser.chats?.map((e, idx) => (
                         e.id === user._id ?
                             (<div key={idx} className='flex w-full items-centre p-2'><div className='font-[1.5vmax] p-[1vmax] rounded-[1.5vmax] mr-6 bg-[#5757d7]'>{e.msg}</div></div>)
                             :

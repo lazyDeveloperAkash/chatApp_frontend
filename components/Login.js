@@ -1,9 +1,10 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import Forget from './Forget';
-import { useDispatch, useSelector } from 'react-redux';
-import { asyncCurrentUser, asyncSinginEmail, asyncSinginNumber } from '@/store/Actions/userActions';
+import { useDispatch, } from 'react-redux';
+import { asyncSinginEmail, asyncSinginNumber } from '@/store/Actions/userActions';
 import { useRouter } from 'next/navigation';
+import { IoMdClose } from 'react-icons/io';
 
 const Login = (props) => {
 
@@ -16,9 +17,6 @@ const Login = (props) => {
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const { isAuthenticated } = useSelector(state => state.userReducers);
-    console.log(isAuthenticated);
-
     const loginSubmitHandler = (e) => {
         e.preventDefault();
         if (loginFeature) {
@@ -26,21 +24,17 @@ const Login = (props) => {
                 email: email,
                 password: password
             }
-            dispatch(asyncSinginEmail(user));
+            const res = dispatch(asyncSinginEmail(user));
+            res && router.push("/auth");
         } else {
             const user = {
                 contact: contact,
                 password: password
             }
-            dispatch(asyncSinginNumber(user));
+            const res = dispatch(asyncSinginNumber(user));
+            res && router.push("/auth");
         }
     }
-
-    useEffect(() => {
-        dispatch(asyncCurrentUser());
-        if (isAuthenticated) router.push("/auth");
-    }, [isAuthenticated])
-
 
 
     return (
@@ -48,7 +42,7 @@ const Login = (props) => {
             <div className={`absolute top-0 w-full h-[100vh] flex items-center justify-center bg-[#0000001a]`}>
                 <div className={`w-[11/12] md:w-[60vmax] lg:w-[30vmax] bg-white p-3 flex flex-col items-center gap-8 border rounded-xl shadow-lg shadow-[#4acd8d]`}>
                     <div className="flex items-center justify-end w-full">
-                        <img onClick={() => setLogin(false)} className="h-6 cursor-pointer" src="https://icons.veryicon.com/png/o/miscellaneous/medium-thin-linear-icon/cross-23.png" alt="" />
+                        <div onClick={() => setLogin(false)} className='cursor-pointer'><IoMdClose size={25} /></div>
                     </div>
                     <h1 className="text-[6vmax] md:text-[2vmax]">Login</h1>
                     <div className="flex items-center gap-4 mt-1">
@@ -68,7 +62,7 @@ const Login = (props) => {
                                 <input className='w-full h-10 rounded-lg	p-3 mt-1 border-2 focus:border-[#4acd8d] focus:outline-none disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500' name='email' placeholder="Something@gmail.com" type="email" onChange={(e) => setEmail(e.target.value)} />
                             </div> : <div>
                                 <label htmlFor="">Contact</label>
-                                <input className='w-full h-10 rounded-lg	p-3 mt-1 border-2 focus:border-[#4acd8d] focus:outline-none' name='contact' placeholder="Enter Your Mobile Number" type="text" onChange={(e) => setContact(e.target.value)} />
+                                <input className='w-full h-10 rounded-lg	p-3 mt-1 border-2 focus:border-[#4acd8d] focus:outline-none' name='contact' placeholder="Enter Your Mobile Number" maxLength="10" type="text" onChange={(e) => setContact(e.target.value)} />
                             </div>}
                             <div>
                                 <label htmlFor="">Password</label>

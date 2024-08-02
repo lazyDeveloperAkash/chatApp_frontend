@@ -14,6 +14,7 @@ const left = (props) => {
 
   const [profile, setProfile] = useState(false);
   const [group, setgroup] = useState(false);
+  // const [isVisible, setIsVisible] = useState(clickedId ? false : true)
   const dispatch = useDispatch();
 
   const chatHandler = (user) => {
@@ -30,7 +31,7 @@ const left = (props) => {
   
 
   return (
-    <div className='h-[100vh] w-[100vw] min-w-[30vmax] md:w-[30vw] bg-[#000000d3] relative'>
+    <div className={`h-[100vh] w-[100vw] min-w-[30vmax] md:w-[30vw] bg-[#000000d3] relative ${clickedId ? "md:bg-red-600" : ""}`}>
       {profile ? <Profile setProfile={setProfile} /> : ""}
       {group ? <Group setgroup={setgroup} user={user} /> : ""}
       <div className='w-full h-[22%] pt-5'>
@@ -50,14 +51,14 @@ const left = (props) => {
       </div>
       <div className={`w-full h-[78%] px-4 flex flex-col gap-4 overflow-y-auto pt-2 removeScrollbar`}>
         {friendArr && friendArr.map((e, idx) => (
-          <div key={idx} className={`border-black hover:border-[1px] rounded-xl flex items-center px-3 py-2 ${e._id === clickedId ? 'bg-black' : ""}`} onClick={() => chatHandler(e)}>
-            <div className='bg-white h-12 w-12 rounded-full cursor-pointer overflow-hidden bg-cover'><img src={e.avatar.url} alt="" /></div>
+          <div key={idx} className={`hover:bg-black cursor-pointer rounded-xl flex items-center px-3 py-2 ${e._id === clickedId ? 'bg-black' : ""}`} onClick={() => chatHandler(e)}>
+            <div className='bg-white h-12 w-12 rounded-full cursor-pointer overflow-hidden bg-cover'><img src={e.avatar?.url} alt="" /></div>
             <h1 className='ml-5 text-xl text-white'>{e.name}</h1>
           </div>
         ))}
         {user && user.groups.map((e, idx) => (
-          <div key={idx} className={`border-black hover:border-[1px] rounded-xl flex items-center px-3 py-2 ${e._id === clickedId ? 'bg-black' : ""}`} onClick={() => groupChatHandler(e._id)}>
-            <div className='bg-white h-12 w-12 rounded-full cursor-pointer overflow-hidden bg-cover'><img src={e.avatar.url} alt="" /></div>
+          <div key={idx} className={`hover:bg-black cursor-pointer rounded-xl flex items-center px-3 py-2 ${e._id === clickedId ? 'bg-black' : ""}`} onClick={() => groupChatHandler(e._id)}>
+            <div className='bg-white h-12 w-12 rounded-full cursor-pointer overflow-hidden bg-cover'><img src={e.avatar?.url} alt="" /></div>
             <h1 className='ml-5 text-xl text-white'>{e.name}</h1>
           </div>
         ))}

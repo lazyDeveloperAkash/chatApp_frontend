@@ -1,55 +1,64 @@
 import axios from "@/utils/axios";
 import { addUser, removeUser, chatUser } from "../Reducers/userReducers";
 import { toast } from "react-toastify";
-import cookie from "@/utils/cookie";
+import { useMemo } from "react";
+// import cookie from "@/utils/cookie";
 
 export const asyncCurrentUser = () => async (dispatch, getState) => {
     try {
-        const { data } = await axios.get("/user");
+        const {data} = await axios.get("/user");
+        // const { data } = useMemo(async() => await axios.get("/user"), []);
+        console.log(data)
         dispatch(addUser(data));
     } catch (error) {
-        console.log(error.responce);
+        console.log(error);
     }
 }
 
 export const asyncChatUser = (id) => async (dispatch, getState) => {
     try {
-        const { data } = await axios.post("/chat", {id});
+        const {data} = await axios.post("/chat", {id});
+        console.log(data)
+        // const { data } = useMemo(async() => await axios.post("/chat", { id }), []);
         dispatch(chatUser(data));
     } catch (error) {
-        console.log(error.response.data.message && error.response.data.message)
+        console.log(error.response?.data?.message && error.response?.data?.message)
     }
 }
 
 export const asyncSingup = (user) => async (dispatch, getState) => {
     try {
         const { data } = await axios.post("/singup", user);
-        dispatch(asyncCurrentUser());
+        dispatch(addUser(data.user));
         toast.success("Singup Succesfull");
+        return true;
     } catch (error) {
-        if (error.response.data.message != "Please login to eccess the resource") toast.error(error.response.data.message && error.response.data.message);
-        console.log(error)
+        if (error.response?.data?.message != "Please login to eccess the resource") toast.error(error.response?.data?.message && error.response?.data?.message);
+        return false;
     }
 }
 
 export const asyncSinginEmail = (user) => async (dispatch, getState) => {
     try {
         const { data } = await axios.post("/singin/email", user);
-        dispatch(asyncCurrentUser());
+        dispatch(addUser(data.user));
         toast.success("Login Succesfull");
+        return true;
     } catch (error) {
-        toast.error(error.response.data.message && error.response.data.message);
+        toast.error(error.response?.data?.message && error.response?.data?.message);
+        return false;
     }
 }
 
 export const asyncSinginNumber = (user) => async (dispatch, getState) => {
     try {
-        const response = await axios.post("/singin/contact", user);
-        dispatch(asyncCurrentUser());
-        cookie(response);
+        const { data } = await axios.post("/singin/contact", user);
+        dispatch(addUser(data.user));
         toast.success("Login Succesfull");
+        return true;
     } catch (error) {
-        toast.error(error.response.data.message && error.response.data.message);
+        toast.error(error.response?.data?.message && error.response?.data?.message);
+        return false;
     }
 }
 
@@ -59,7 +68,7 @@ export const asynccreateGroup = (groupInfo) => async (dispatch, getState) => {
         toast.success("Group Created Succesfully");
         dispatch(asyncCurrentUser());
     } catch (error) {
-        console.log(error.response?.data.message)
+        console.log(error.response?.data?.message)
     }
 }
 
@@ -68,7 +77,7 @@ export const asyncGroupDetails = (id) => async (dispatch, getState) => {
         const { data } = await axios.post('/group-info', { id });
         dispatch(chatUser(data));
     } catch (error) {
-        console.log(error.response.data.message && error.response.data.message)
+        console.log(error.response?.data?.message && error.response?.data?.message)
     }
 }
 
@@ -76,9 +85,11 @@ export const asyncSingout = () => async (dispatch, getState) => {
     try {
         const { data } = await axios.get("/singout");
         dispatch(removeUser());
-        toast.info(data.message && data.message);
+        toast.info(data?.message && data?.message);
+        return true;
     } catch (error) {
-        toast.error(error.response.data.message && error.response.data.message);
+        toast.error(error.response?.data?.message && error.response?.data?.message);
+        return false;
     }
 }
 
@@ -86,9 +97,9 @@ export const asyncUpdateUser = (user) => async (dispatch, getState) => {
     try {
         const { data } = await axios.post("/update-profile", user);
         dispatch(asyncCurrentUser());
-        toast.success(data.message && data.message);
+        toast.success(data?.message && data?.message);
     } catch (error) {
-        toast.error(error.response.data.message && error.response.data.message);
+        toast.error(error.response?.data?.message && error.response?.data?.message);
     }
 }
 
@@ -96,9 +107,9 @@ export const asyncAvatar = (avatar) => async (dispatch, getState) => {
     try {
         const { data } = await axios.post("/upload-profile-picture", avatar);
         dispatch(asyncCurrentUser());
-        toast.success(data.message && data.message);
+        toast.success(data?.message && data?.message);
     } catch (error) {
-        toast.error(error.response.data.message && error.response.data.message);
+        toast.error(error.response?.data?.message && error.response?.data?.message);
     }
 }
 
@@ -106,9 +117,9 @@ export const asyncResetPasswordStudent = (password) => async (dispatch, getState
     try {
         const { data } = await axios.post("/update-password", password);
         dispatch(asyncCurrentUser());
-        toast.success(data.message && data.message);
+        toast.success(data?.message && data?.message);
     } catch (error) {
-        toast.error(error.response.data.message && error.response.data.message);
+        toast.error(error.response?.data?.message && error.response?.data?.message);
     }
 }
 
@@ -116,9 +127,9 @@ export const asyncDeleteStudent = () => async (dispatch, getState) => {
     try {
         const { data } = await axios.get("/delete");
         dispatch(removeStudent());
-        toast.warning(data.message && data.message);
+        toast.warning(data?.message && data?.message);
     } catch (error) {
-        toast.error(error.response.data.message && error.response.data.message);
+        toast.error(error.response?.data?.message && error.response?.data?.message);
     }
 }
 
@@ -126,9 +137,9 @@ export const asyncSendEmail = (email) => async (dispatch, getState) => {
     try {
         const { data } = await axios.post("/send-email", email);
         dispatch(asyncCurrentUser());
-        toast.info(data.message);
+        toast.info(data?.message);
     } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.response?.data?.message);
     }
 }
 
@@ -136,9 +147,9 @@ export const asyncOtpVarificationStudent = (OTP) => async (dispatch, getState) =
     try {
         const { data } = await axios.post("/otp-varification", OTP);
         dispatch(asyncCurrentUser());
-        toast.info(data.message);
+        toast.info(data?.message);
     } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.response?.data?.message);
     }
 }
 
@@ -146,9 +157,9 @@ export const asyncForgetPassChangeStudent = (newPass) => async (dispatch, getSta
     try {
         const { data } = await axios.post("/forget-password-change", newPass);
         dispatch(asyncCurrentUser());
-        toast.success(data.message);
+        toast.success(data?.message);
     } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.response?.data?.message);
     }
 }
 
@@ -156,11 +167,11 @@ export const asyncForgetPassChangeStudent = (newPass) => async (dispatch, getSta
 
 export const asyncNewChat = (id) => async (dispatch, getState) => {
     try {
-        const { data } = await axios.post("/new-chat", {id});
+        const { data } = await axios.post("/new-chat", { id });
         dispatch(chatUser(data));
         dispatch(asyncCurrentUser());
     } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.response?.data?.message);
     }
 }
 
