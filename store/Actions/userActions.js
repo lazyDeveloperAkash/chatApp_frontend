@@ -28,7 +28,7 @@ export const asyncChatUser = (id) => async (dispatch, getState) => {
 
 export const asyncSingup = (user) => async (dispatch, getState) => {
     try {
-        const { data } = await axios.post("/singup", user, {withCredentials: true});
+        const { data } = await axios.post("/singup", user);
         dispatch(addUser(data.user));
         toast.success("Singup Succesfull");
         return true;
