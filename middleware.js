@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 export function middleware(request) {
 //   return NextResponse.redirect(new URL('/home', request.url))
 const token = request.cookies.get("token")?.value;
-console.log(token)
+const authenticatedUserNotAccessPath = request.nextUrl.pathname == "/"
 
 }
  
