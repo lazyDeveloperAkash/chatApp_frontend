@@ -1,9 +1,11 @@
 'use client'
+import Loader from '@/components/Loader';
 import Login from '@/components/Login';
 import { asyncCurrentUser, asyncSingup } from '@/store/Actions/userActions';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+
 
 const singUp = () => {
 
@@ -12,12 +14,14 @@ const singUp = () => {
   const [contact, setContact] = useState("");
   const [password, setPassword] = useState("");
   const [login, setLogin] = useState(false);
+  const [loader, setLoader] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
 
   const { isAuthenticated } = useSelector(state => state.userReducers);
 
   const submitHandler = async(e) => {
+    setLoader(!loader);
     e.preventDefault();
     const user = {
       name: name,
@@ -26,6 +30,7 @@ const singUp = () => {
       password: password
     }
     const status = await dispatch(asyncSingup(user));
+    setLoader(!loader)
     console.log(status)
     if(status) router.push("/auth");
   }
@@ -79,6 +84,7 @@ const singUp = () => {
         </div>
       </div>
       {login ? <Login setLogin={setLogin} /> : ""}
+      {loader ? <Loader /> : ""}
     </>
   )
 }
