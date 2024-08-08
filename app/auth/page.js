@@ -33,8 +33,9 @@ const page = () => {
   const [callerContact, setCallerContact] = useState("");
   const remotePeer = useRef(null);
 
-  const dispatch = useDispatch();
+  
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const { isAuthenticated } = useSelector(state => state.userReducers);
 
@@ -43,8 +44,17 @@ const page = () => {
   // }
 
   useEffect(() => {
-    if (isAuthenticated && !user) dispatch(asyncCurrentUser());
-    if (!isAuthenticated) router.push("/");
+    const fetchUser = async () => {
+      if (!user) {
+        const userData = await dispatch(asyncCurrentUser());
+        setUser(userData);
+      }
+    };
+
+    fetchUser();
+  }, [user, dispatch]);
+
+  useEffect(() => {
     if (user) socket.emit("storeClientInfo", { contact: user.contact });
     if (!isGroupInfoStored) {
       let idArr = [];
@@ -54,7 +64,7 @@ const page = () => {
       socket.emit("join-to-room", { rooms: idArr });
     }
     return () => socket.off("storeClientInfo");
-  }, [isAuthenticated, socket.id])
+  }, [socket.id, user])
 
   // useEffect(() => {
 

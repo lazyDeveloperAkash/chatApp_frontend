@@ -46,9 +46,9 @@ const newChat = (props) => {
     }
 
     return (
-        <div className='h-[100vh] w-[100vw] md:w-[40vw] bg-[#000000d3] relative overflow-hidden'>
+        <div className='h-[100vh] w-[100vw] md:w-[30vw] bg-[#000000fb] relative overflow-hidden'>
             <div className='w-full'>
-                <div className='w-full flex justify-end p-4'><div onClick={() => setNewChat(false)}><IoMdClose color='white' size={25} /></div></div>
+                <div className='w-full flex justify-end p-4'><div className='cursor-pointer' onClick={() => setNewChat(false)}><IoMdClose color='white' size={25} /></div></div>
                 <h1 className='text-white m-5 text-2xl'>Serch New Person</h1>
                 <div className='w-full px-4 relative inline-block mt-2'>
                     <input className='w-full h-10 rounded-xl px-4 border-none outline-none' type="text" placeholder='Type Number...' onChange={sendnumberHandler} />

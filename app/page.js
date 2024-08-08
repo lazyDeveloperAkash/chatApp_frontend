@@ -18,11 +18,10 @@ const singUp = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const { isAuthenticated } = useSelector(state => state.userReducers);
-
   const submitHandler = async(e) => {
-    setLoader(!loader);
     e.preventDefault();
+    if(!email && !password && !contact && !name) return;
+    setLoader(!loader);
     const user = {
       name: name,
       email: email,
@@ -31,24 +30,16 @@ const singUp = () => {
     }
     const status = await dispatch(asyncSingup(user));
     setLoader(!loader)
-    console.log(status)
     if(status) router.push("/auth");
   }
 
-  
-  useEffect(() => {
-    dispatch(asyncCurrentUser());
-    if (isAuthenticated) router.push("/auth");
-
-}, [isAuthenticated])
-
   return (
-    <>
+    <div>
       <div className='w-[100vw] h-[100vh] flex items-center justify-center'>
         <div className='p-8 md:w-2/5 flex bg-white justify-center items-center flex-col rounded-2xl shadow-lg shadow-[#4acd8d]'>
           <div className="w-full h-20 flex justify-center items-center">
             <div className={`w-full h-4/6 rounded-xl flex justify-center items-center gap-4 cursor-pointer border-2 border-cyan-500`}>
-              <img className="h-6" src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-webinar-optimizing-for-success-google-business-webinar-13.png" alt="" />
+              <img className="h-6" src="google-logo.png" alt="" />
               <h3>Sing up with Google</h3>
             </div>
           </div>
@@ -85,7 +76,7 @@ const singUp = () => {
       </div>
       {login ? <Login setLogin={setLogin} /> : ""}
       {loader ? <Loader /> : ""}
-    </>
+    </div>
   )
 }
 

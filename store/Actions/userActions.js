@@ -7,9 +7,8 @@ import { useMemo } from "react";
 export const asyncCurrentUser = () => async (dispatch, getState) => {
     try {
         const {data} = await axios.get("/user");
-        // const { data } = useMemo(async() => await axios.get("/user"), []);
-        console.log(data)
-        dispatch(addUser(data));
+        await dispatch(addUser(data));
+        return data;
     } catch (error) {
         console.log(error);
     }
@@ -18,8 +17,6 @@ export const asyncCurrentUser = () => async (dispatch, getState) => {
 export const asyncChatUser = (id) => async (dispatch, getState) => {
     try {
         const {data} = await axios.post("/chat", {id});
-        console.log(data)
-        // const { data } = useMemo(async() => await axios.post("/chat", { id }), []);
         dispatch(chatUser(data));
     } catch (error) {
         console.log(error.response?.data?.message && error.response?.data?.message)
@@ -53,10 +50,12 @@ export const asyncSinginEmail = (user) => async (dispatch, getState) => {
 export const asyncSinginNumber = (user) => async (dispatch, getState) => {
     try {
         const { data } = await axios.post("/singin/contact", user);
-        dispatch(addUser(data.user));
+        await dispatch(addUser(data.user));
+        console.log(data)
         toast.success("Login Succesfull");
         return true;
     } catch (error) {
+        console.log(error)
         toast.error(error.response?.data?.message && error.response?.data?.message);
         return false;
     }

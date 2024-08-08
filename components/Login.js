@@ -17,21 +17,23 @@ const Login = (props) => {
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const loginSubmitHandler = (e) => {
+    const loginSubmitHandler = async(e) => {
         e.preventDefault();
+        if(!email && !password && !contact) return;
         if (loginFeature) {
             const user = {
                 email: email,
                 password: password
             }
-            const res = dispatch(asyncSinginEmail(user));
+            const res = await dispatch(asyncSinginEmail(user));
             res && router.push("/auth");
         } else {
             const user = {
                 contact: contact,
                 password: password
             }
-            const res = dispatch(asyncSinginNumber(user));
+            const res = await dispatch(asyncSinginNumber(user));
+            console.log(res)
             res && router.push("/auth");
         }
     }
@@ -39,7 +41,7 @@ const Login = (props) => {
 
     return (
         <>
-            <div className={`absolute top-0 w-full h-[100vh] flex items-center justify-center bg-[#0000001a]`}>
+            <div className={`absolute top-0 w-full z-10 h-[100vh] flex items-center justify-center bg-[#0000001a]`}>
                 <div className={`w-[11/12] md:w-[60vmax] lg:w-[30vmax] bg-white p-3 flex flex-col items-center gap-8 border rounded-xl shadow-lg shadow-[#4acd8d]`}>
                     <div className="flex items-center justify-end w-full">
                         <div onClick={() => setLogin(false)} className='cursor-pointer'><IoMdClose size={25} /></div>
