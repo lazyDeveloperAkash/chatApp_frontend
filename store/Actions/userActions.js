@@ -51,11 +51,9 @@ export const asyncSinginNumber = (user) => async (dispatch, getState) => {
     try {
         const { data } = await axios.post("/singin/contact", user);
         await dispatch(addUser(data.user));
-        console.log(data)
         toast.success("Login Succesfull");
         return true;
     } catch (error) {
-        console.log(error)
         toast.error(error.response?.data?.message && error.response?.data?.message);
         return false;
     }

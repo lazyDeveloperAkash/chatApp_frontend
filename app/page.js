@@ -74,7 +74,7 @@ const singUp = () => {
           </form>
         </div>
       </div>
-      {login ? <Login setLogin={setLogin} /> : ""}
+      {login ? <Login setLogin={setLogin} setLoader={setLoader} /> : ""}
       {loader ? <Loader /> : ""}
     </div>
   )

@@ -6,9 +6,8 @@ import { asyncSinginEmail, asyncSinginNumber } from '@/store/Actions/userActions
 import { useRouter } from 'next/navigation';
 import { IoMdClose } from 'react-icons/io';
 
-const Login = (props) => {
+const Login = ({setLogin, setLoader}) => {
 
-    const { setLogin } = props;
     const [email, setEmail] = useState("");
     const [contact, setContact] = useState("");
     const [password, setPassword] = useState("");
@@ -20,13 +19,16 @@ const Login = (props) => {
     const loginSubmitHandler = async(e) => {
         e.preventDefault();
         if(!email && !password && !contact) return;
+        setLoader(true)
         if (loginFeature) {
             const user = {
                 email: email,
                 password: password
             }
             const res = await dispatch(asyncSinginEmail(user));
-            res && router.push("/auth");
+            setLoader(false)
+            if(res) router.push("/auth");
+            return
         } else {
             const user = {
                 contact: contact,
@@ -34,7 +36,10 @@ const Login = (props) => {
             }
             const res = await dispatch(asyncSinginNumber(user));
             console.log(res)
-            res && router.push("/auth");
+            setLoader(false)
+            console.log("first")
+            router.push("/auth");
+            return
         }
     }
 
