@@ -53,8 +53,7 @@ const Profile = (props) => {
 
     const singOutHandler = async()=> {
         const res = await dispatch(asyncSingout());
-        console.log(res);
-        res && router.push("/");
+        if(res) router.push("/");
     }
 
     return (

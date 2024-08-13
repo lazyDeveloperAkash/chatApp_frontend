@@ -5,7 +5,6 @@ import { asyncCurrentUser } from '@/store/Actions/userActions'
 import { useRouter } from 'next/navigation'
 // import Peer from "simple-peer"
 import socketIo from 'socket.io-client';
-import dynamic from 'next/dynamic'
 import BlankRight from '@/components/BlankRight'
 import LeftSkeleton from '@/components/skeletons/LeftSkeleton'
 import RightSkeleton from '@/components/skeletons/RightSkeleton'
@@ -33,15 +32,12 @@ const page = () => {
   const [callerContact, setCallerContact] = useState("");
   const remotePeer = useRef(null);
 
-  
-  const router = useRouter();
   const dispatch = useDispatch();
-
-  const { isAuthenticated } = useSelector(state => state.userReducers);
 
   // const callPeer = ()=> {
   //   const peerInstance = new Peer();
   // }
+
 
   useEffect(() => {
     const fetchUser = async () => {

@@ -12,10 +12,10 @@ const LeftSkeleton = () => {
                     </div>
                     <div class='flex items-center cursor-pointer'><div class="bg-gray-200 h-5 w-5 rounded-full"></div></div>
                 </div>
+            </div>
                 <div class='w-full px-4 relative inline-block mt-2'>
                     <div class='w-full h-10 rounded-xl px-4 bg-gray-200 animate-pulse'></div>
                 </div>
-            </div>
             <div class="w-full h-4/5 px-4 flex flex-col gap-4 overflow-y-auto pt-2 removeScrollbar">
                 <div class="rounded-xl flex items-center px-3 py-2 animate-pulse">
                     <div class='bg-gray-200 h-12 w-12 rounded-full'></div>
